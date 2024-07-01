@@ -1,0 +1,8 @@
+.assets/__pycache__/
+.vscode/
+*.pyc
+.env/
+environment/SecretConfig.py
+.vercel
+/api/build/app/
+/api/dist/
