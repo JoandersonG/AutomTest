@@ -3,8 +3,8 @@ import os
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from generator_python import generate_tests_python
-from generator_java import generate_tests_java
+from python_generator import generate_tests_python
+from java_generator import generate_tests_java
 
 
 def generate_tests(MUT, file_path='', programing_language = "java"):

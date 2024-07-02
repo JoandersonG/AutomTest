@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 
-from assets import generator
+from assets.tests_generator import generator
 from assets.components import get_methods_from_test_cases, Method, Parameter, TestSet, ParamRange
 from assets.ui import MethodCatcherService
 
