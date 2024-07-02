@@ -36,6 +36,7 @@ def generate_tests():
         # Extract relevant fields
         methodsJson = data.get('methods')
         directory = data.get('directory')
+        programmingLanguage = data.get('programmingLanguage')
 
         if methodsJson is None or methodsJson is []:
             errorMsg = "Invalid JSON body. Please provide a list of methods and a directory to save the result"
@@ -95,7 +96,7 @@ def generate_tests():
 
         # Process the user story
         for method in methods:
-            generator.generate_tests(method, directory)
+            generator.generate_tests(method, directory,programmingLanguage)
 
         #Build response
         return jsonify("Success generating tests"), 200
