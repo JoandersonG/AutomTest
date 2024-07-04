@@ -1,7 +1,7 @@
 from generate_data_types import generate_Date, generate_String, generate_int, generate_decimal_numbers
 import random
 
-#TODO falta resolver a importação , o output quano é um numero e o Date
+#TODO falta resolver a importação e o Date
 
 def generate_param_value_javascript(MUT, i, j):  # i = parameter order / j = testset order
     if (MUT.params[i].type_name == 'String'):
@@ -60,6 +60,7 @@ def generate_expected_output_javascript(MUT, i):  # i = testset order
 
         for x in range(0, len(vals1)):
             content += generate_String(vals1[x], vals2[x])
+        content = 'retorno == \"' + content + '\"'
 
     elif (MUT.output_type == 'char'):
         vals = v1.replace(" ", "").split(';')
@@ -69,18 +70,18 @@ def generate_expected_output_javascript(MUT, i):  # i = testset order
         provided_chars = v1.replace(" ", "").split(';')
         for character in provided_chars:
             if content != '':
-                content += ' ||\'' + character + '\''
+                content += ' || retorno == \'' + character + '\''
             else:
-                content += character
+                content += 'retorno == \'' + character + '\''
 
     elif (MUT.output_type == 'boolean'):
 
         if (v1.casefold() == "true"):
-            content += "true"
+            content += "retorno"
         else:
-            return "false"
+            return "!retorno"
 
-    else:  # if (MUT.output_type == 'int' or MUT.output_type == 'double' or MUT.output_type == 'float'): #TODO
+    else:  # if (MUT.output_type == 'int' or MUT.output_type == 'double' or MUT.output_type == 'float'):
         if (v1 != '' and v2 != ''):
             content = '(retorno >= ' + v1 + ' && retorno <= ' + v2 + ')'
         if (v3 != ''):
@@ -105,9 +106,9 @@ def test_content_javascript(MUT, test_set_name, cont, testset_position):
         else:
             content += ", " + generate_param_value_javascript(MUT, x, testset_position)
 
-    content += ")\n\t\texpect(retorno).toEqual("
+    content += ")\n\t\texpect("
     content += generate_expected_output_javascript(MUT, testset_position)
-    content += ")\n\t})\n"
+    content += ").toBeTruthy()\n\t})\n"
     return content
 
 
