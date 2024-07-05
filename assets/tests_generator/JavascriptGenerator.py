@@ -1,6 +1,6 @@
 from Generator import Generator
 
-class JavaGenerator(Generator):
+class JavascriptGenerator(Generator):
 
 
     def __init__(self):
@@ -10,41 +10,34 @@ class JavaGenerator(Generator):
                  not_operator='!', 
                  true_syntax='true', 
                  false_syntax='false', 
-                 title='Test.java', 
-                 bottom="\n}"
+                 title='.spec.js', 
+                 bottom="\n})"
                  )
-
 
     def header_content(self, MUT):
         content = ''
         if (MUT.package_name != ''):
             content += "package " + MUT.package_name + ";\n"
-        content += "import org.junit.*;\nimport static org.junit.Assert.assertTrue;\n\npublic class "
-        content += MUT.class_name + "Test extends " + MUT.class_name + "{\n"
+        content += "import org.junit.*;\nimport static org.junit.Assert.assertTrue;\n\ndescribe( \""
+        content += MUT.class_name + " Tests \", () => {\n"
         return content
 
 
     def test_content(self, MUT, test_set_name, cont, testset_position):
-        content = "\n\t@Test\n\tpublic void " + test_set_name + str(cont) + "() {\n\t\t"
-        content += MUT.output_type + " retorno = " + MUT.name + "("
+        content = "\n\tit(\" test " + test_set_name + str(cont) + "\", () => {\n\t\t"
+        content +="const retorno = " + MUT.name + "("
 
+        # TO DO: gerar valores
         for x in range(0, len(MUT.params)):
             if (x == 0):
                 content += self.generate_param_value(MUT, x, testset_position)
             else:
                 content += ", " + self.generate_param_value(MUT, x, testset_position)
 
-        content += ");\n\t\tassertTrue("
+        content += ")\n\t\texpect("
         content += self.generate_expected_output(MUT, testset_position)
-        content += ");\n\t}\n"
+        content += ").toBeTruthy()\n\t})\n"
         return content
-
-
-
-
-
-
-
 
 
 
