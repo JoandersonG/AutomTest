@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
 
-from assets.tests_generator import generator
+from assets.tests_generator import generate
 from assets.components import get_methods_from_test_cases, Method, Parameter, TestSet, ParamRange
 from assets.ui import MethodCatcherService
 
@@ -96,7 +96,7 @@ def generate_tests():
 
         # Process the user story
         for method in methods:
-            generator.generate_tests(method, directory,programmingLanguage)
+            generate.generate_tests(method, directory,programmingLanguage)
 
         #Build response
         return jsonify("Success generating tests"), 200
