@@ -11,10 +11,9 @@ from JavascriptGenerator import JavascriptGenerator
 def generate_tests(MUT, file_path='', programing_language = "java"):
     if(programing_language == "python"):
         generator = PythonGenerator()
-        generator.generate_tests(MUT, file_path)
     elif(programing_language == "java"):
         generator = JavaGenerator()
-        generator.generate_tests(MUT, file_path)
     elif(programing_language == "javascript"):
         generator = JavascriptGenerator()
-        generator.generate_tests(MUT, file_path)
+        
+    generator.generate_tests(MUT, file_path)
