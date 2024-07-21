@@ -130,8 +130,7 @@ def process_user_story():
             return jsonify({'error': errorMsg}), 400
 
         # Process the user story
-        methods = MethodCatcherService.get(user_story, lang)
-
+        methods = MethodCatcherService.get(user_story, lang)        
         methods = get_methods_from_test_cases(methods)
 
         #Build response
