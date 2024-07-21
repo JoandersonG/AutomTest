@@ -40,7 +40,9 @@ class Generator:
             days_between_dates = time_between_dates.days
             random_number_of_days = random.randrange(days_between_dates)
             random_date = start_date + datetime.timedelta(days=random_number_of_days)
-
+            print(random_date)
+            print(type(random_date))
+            
             return str(random_date)
 
         else:
@@ -203,7 +205,7 @@ class Generator:
 
         else:  # if (MUT.output_type == 'int' or MUT.output_type == 'double' or MUT.output_type == 'float'):
             if (v1 != '' and v2 != ''):
-                content = '(retorno >= ' + v1 + self.and_operator + ' retorno <= ' + v2 + ') '
+                content = '(retorno >= ' + v1 + " "+ self.and_operator + ' retorno <= ' + v2 + ') '
             if (v3 != ''):
                 vals = v3.replace(" ", "").split(';')
                 for x in range(0, len(vals)):
@@ -214,7 +216,7 @@ class Generator:
 
         return content
     
-
+    
     def generate_tests(self, MUT, file_path=''):
         file_location = file_path + ('' if file_path.endswith('/') else '/') + MUT.class_name + self.title
         testfile = open(file_location, 'a+')
@@ -226,7 +228,7 @@ class Generator:
         else:
             testfile.seek(0)
             testfile.truncate()
-            testfile.write(''.join([a for a in previous[:-1]]))
+            testfile.write(''.join([a for a in previous[:-2]]))
 
         cont = 1
         for i in range(0, len(MUT.testsets)):

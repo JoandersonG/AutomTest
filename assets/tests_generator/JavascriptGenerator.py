@@ -1,4 +1,6 @@
 from Generator import Generator
+import random
+import datetime
 
 class JavascriptGenerator(Generator):
 
@@ -13,12 +15,36 @@ class JavascriptGenerator(Generator):
                  title='.spec.js', 
                  bottom="\n})"
                  )
+        
+
+    def generate_Date(self, v1, v2, v3):
+        print('generate_Date v1=' + v1 + ' v2=' + v2)
+        if v1 != '' and v2 != '':
+
+            ymd1 = self.get_YearMonthDay_from_Date(v1)
+            ymd2 = self.get_YearMonthDay_from_Date(v2)
+
+            start_date = datetime.date(int(ymd1[0]), int(ymd1[1]), int(ymd1[2]))
+            end_date = datetime.date(int(ymd2[0]), int(ymd2[1]), int(ymd2[2]))
+
+            time_between_dates = end_date - start_date
+            days_between_dates = time_between_dates.days
+            random_number_of_days = random.randrange(days_between_dates)
+            random_date = start_date + datetime.timedelta(days=random_number_of_days)
+            print(random_date)
+            print(type(random_date))
+            
+            return f"new Date(\"{random_date}\")"
+
+        else:
+            print("Data não foi preenchida corretamente.")
+            return False
 
     def header_content(self, MUT):
         content = ''
-        if (MUT.package_name != ''):
-            content += "package " + MUT.package_name + ";\n"
-        content += "import org.junit.*;\nimport static org.junit.Assert.assertTrue;\n\ndescribe( \""
+        # if (MUT.package_name != ''):
+        #     content += "package " + MUT.package_name + ";\n"
+        content += "describe( \""
         content += MUT.class_name + " Tests \", () => {\n"
         return content
 
