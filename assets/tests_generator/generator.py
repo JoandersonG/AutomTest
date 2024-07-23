@@ -25,9 +25,10 @@ class Generator:
 
         return ymd
 
+    def get_date_format():
+        pass
 
     def generate_Date(self, v1, v2, v3):
-        print('generate_Date v1=' + v1 + ' v2=' + v2)
         if v1 != '' and v2 != '':
 
             ymd1 = self.get_YearMonthDay_from_Date(v1)
@@ -40,15 +41,15 @@ class Generator:
             days_between_dates = time_between_dates.days
             random_number_of_days = random.randrange(days_between_dates)
             random_date = start_date + datetime.timedelta(days=random_number_of_days)
-            print(random_date)
-            print(type(random_date))
+            day = random_date.day
+            month = random_date.month
+            year = random_date.year
             
-            return str(random_date)
+            return self.get_date_format(year, month, day)
 
         else:
             print("Data não foi preenchida corretamente.")
             return False
-
 
     def generate_String(self, value, qtd):
         signs_without_quotes = string.punctuation[0:1] + string.punctuation[2:]  # remove simbolo: "
@@ -169,6 +170,8 @@ class Generator:
             else:
                 return self.false_syntax
 
+    def generate_date_output(self, v1, v2, v3):
+        pass
 
     def generate_expected_output(self, MUT, i):  # i = testset order
 
@@ -202,6 +205,9 @@ class Generator:
                 content += "retorno"
             else:
                 return self.not_operator + " retorno"
+
+        elif (MUT.output_type == 'Date'):
+            return self.generate_date_output()
 
         else:  # if (MUT.output_type == 'int' or MUT.output_type == 'double' or MUT.output_type == 'float'):
             if (v1 != '' and v2 != ''):
