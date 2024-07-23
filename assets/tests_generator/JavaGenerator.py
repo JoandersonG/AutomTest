@@ -14,6 +14,28 @@ class JavaGenerator(Generator):
                  bottom="\n}"
                  )
 
+    def get_date_format(self, year, month, day):
+        return f"new Date({year}, {month}, {day})"
+    
+    def generate_date_output(self, v1, v2, v3):
+        if (v1 != '' and v2 != ''):
+            ymd1 = self.get_YearMonthDay_from_Date(v1)
+            ymd2 = self.get_YearMonthDay_from_Date(v2)
+
+            start_date = self.get_date_format(ymd1[0], ymd1[1], ymd1[2])
+            end_date = self.get_date_format(ymd2[0], ymd2[1], ymd2[2])
+
+            content = '(retorno >= ' + start_date + " "+ self.and_operator + ' retorno <= ' + end_date + ') '
+        if (v3 != ''):
+            vals = v3.replace(" ", "").split(';')
+            for x in range(0, len(vals)):
+                ymd3 = self.get_YearMonthDay_from_Date(vals[x])
+                date = self.get_date_format(ymd3[0], ymd3[1], ymd3[2])
+                if (content != ''):
+                    content += self.or_operator + ' retorno.getTime() === ' + date + ".getTime()"
+                else:
+                    content += 'retorno.getTime() === ' + date + ".getTime()"
+
 
     def header_content(self, MUT):
         content = ''
