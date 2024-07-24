@@ -22,12 +22,9 @@ class JavaGenerator(Generator):
         if (v1 != '' and v2 != ''):
             ymd1 = self.get_YearMonthDay_from_Date(v1)
             ymd2 = self.get_YearMonthDay_from_Date(v2)
-            print(12)
             start_date = self.get_date_format(ymd1[0], ymd1[1], ymd1[2])
             end_date = self.get_date_format(ymd2[0], ymd2[1], ymd2[2])
-            print(1)
-            content = '(retorno.after(' + start_date + ") || retorno.equals("+ start_date + ")" + self.and_operator+  " retorno.before(" + end_date + ") || retorno.equals("+ start_date + "))"
-            print(123)
+            content = '(retorno.after(' + start_date + ") || retorno.equals("+ end_date + ")" + self.and_operator+  " retorno.before(" + end_date + ") || retorno.equals("+ start_date + "))"
         if (v3 != ''):
             vals = v3.replace(" ", "").split(';')
             for x in range(0, len(vals)):
