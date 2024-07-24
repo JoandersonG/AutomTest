@@ -24,8 +24,8 @@ class JavascriptGenerator(Generator):
             ymd1 = self.get_YearMonthDay_from_Date(v1)
             ymd2 = self.get_YearMonthDay_from_Date(v2)
 
-            start_date = self.get_date_format(ymd1[0], ymd1[1], ymd1[2])
-            end_date = self.get_date_format(ymd2[0], ymd2[1], ymd2[2])
+            start_date = self.get_date_format(int(ymd1[0]), int(ymd1[1]), int(ymd1[2]))
+            end_date = self.get_date_format(int(ymd2[0]), int(ymd2[1]), int(ymd2[2]))
 
             content = '(retorno >= ' + start_date + " "+ self.and_operator + ' retorno <= ' + end_date + ') '
         if (v3 != ''):
@@ -37,6 +37,7 @@ class JavascriptGenerator(Generator):
                     content += self.or_operator + ' retorno.getTime() === ' + date + ".getTime()"
                 else:
                     content += 'retorno.getTime() === ' + date + ".getTime()"
+        return content
 
     def header_content(self, MUT):
         content = ''

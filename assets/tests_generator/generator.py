@@ -25,8 +25,7 @@ class Generator:
 
         return ymd
 
-    def get_date_format():
-        pass
+
 
     def generate_Date(self, v1, v2, v3):
         if v1 != '' and v2 != '':
@@ -170,8 +169,6 @@ class Generator:
             else:
                 return self.false_syntax
 
-    def generate_date_output(self, v1, v2, v3):
-        pass
 
     def generate_expected_output(self, MUT, i):  # i = testset order
 
@@ -205,9 +202,8 @@ class Generator:
                 content += "retorno"
             else:
                 return self.not_operator + " retorno"
-
         elif (MUT.output_type == 'Date'):
-            return self.generate_date_output()
+            return self.generate_date_output(v1,v2,v3)
 
         else:  # if (MUT.output_type == 'int' or MUT.output_type == 'double' or MUT.output_type == 'float'):
             if (v1 != '' and v2 != ''):
