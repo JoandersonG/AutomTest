@@ -202,6 +202,7 @@ class Generator:
                 content += "retorno"
             else:
                 return self.not_operator + " retorno"
+            
         elif (MUT.output_type == 'Date'):
             return self.generate_date_output(v1,v2,v3)
 
@@ -212,7 +213,7 @@ class Generator:
                 vals = v3.replace(" ", "").split(';')
                 for x in range(0, len(vals)):
                     if (content != ''):
-                        content += self.or_operator + ' retorno == ' + vals[x]
+                        content += " " +self.or_operator + ' retorno == ' + vals[x]
                     else:
                         content += 'retorno == ' + vals[x]
 
