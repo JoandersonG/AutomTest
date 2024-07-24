@@ -24,19 +24,21 @@ class PythonGenerator(Generator):
             ymd1 = self.get_YearMonthDay_from_Date(v1)
             ymd2 = self.get_YearMonthDay_from_Date(v2)
 
-            start_date = datetime.date(int(ymd1[0]), int(ymd1[1]), int(ymd1[2]))
-            end_date = datetime.date(int(ymd2[0]), int(ymd2[1]), int(ymd2[2]))
+            start_date = self.get_date_format(int(ymd1[0]), int(ymd1[1]), int(ymd1[2]))
+            end_date = self.get_date_format(int(ymd2[0]), int(ymd2[1]), int(ymd2[2]))
 
             content = '(retorno >= ' + start_date + " "+ self.and_operator + ' retorno <= ' + end_date + ') '
+
         if (v3 != ''):
             vals = v3.replace(" ", "").split(';')
             for x in range(0, len(vals)):
                 ymd3 = self.get_YearMonthDay_from_Date(vals[x])
-                date = datetime.date(int(ymd3[0]), int(ymd3[1]), int(ymd3[2]))
+                date = self.get_date_format(int(ymd3[0]), int(ymd3[1]), int(ymd3[2]))
                 if (content != ''):
                     content += self.or_operator + ' retorno == ' + date
                 else:
                     content += 'retorno == ' + date
+        return content
 
 
     def header_content(self,MUT): #Falta importar a classe
@@ -57,7 +59,6 @@ class PythonGenerator(Generator):
                 content += self.generate_param_value(MUT, x, testset_position)
             else:
                 content += ", " + self.generate_param_value(MUT, x, testset_position)
-
         content += ")\n\t\tself.assertTrue("
         content += self.generate_expected_output(MUT, testset_position)
         content += ")\n"
