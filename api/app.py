@@ -38,8 +38,8 @@ def generate_tests():
         directory = data.get('directory')
         programmingLanguage = data.get('programmingLanguage')
 
-        if methodsJson is None or methodsJson is []:
-            errorMsg = "Invalid JSON body. Please provide a list of methods and a directory to save the result"
+        if methodsJson is None or methodsJson is [] or programmingLanguage == ' ':
+            errorMsg = "Invalid JSON body. Please provide a programming language, a list of methods and a directory to save the result"
             return jsonify({'error': errorMsg}), 400
 
         #TODO: validar cada classe de equivalência fornecida: têm todos os campos necessários?

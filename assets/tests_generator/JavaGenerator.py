@@ -24,7 +24,7 @@ class JavaGenerator(Generator):
             ymd2 = self.get_YearMonthDay_from_Date(v2)
             start_date = self.get_date_format(ymd1[0], ymd1[1], ymd1[2])
             end_date = self.get_date_format(ymd2[0], ymd2[1], ymd2[2])
-            content = '(retorno.after(' + start_date + ") || retorno.equals("+ start_date + ") " + self.and_operator+  " retorno.before(" + end_date + ") || retorno.equals("+ end_date + "))"
+            content = '(!retorno.before(' + start_date + ") " + self.and_operator +  " !retorno.after(" + end_date + "))"
         if (v3 != ''):
             vals = v3.replace(" ", "").split(';')
             for x in range(0, len(vals)):

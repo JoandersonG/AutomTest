@@ -46,13 +46,14 @@ class PythonGenerator(Generator):
         # if (MUT.package_name != ''):
         #     content += "package " + MUT.package_name + ";\n"
         content += "import unittest\n\nclass "
-        content += MUT.class_name + "Test(unittest.TestCase," + MUT.class_name + "):\n"
+        content += MUT.class_name + "Test(unittest.TestCase):\n"
+        content += "\n\tdef setUp(self):\n\t\tself.test = " + MUT.class_name + "(coloque os parametros)\n"
         return content
 
 
     def test_content(self, MUT, test_set_name, cont, testset_position): #DONE
         content = "\n\tdef test_" + test_set_name + str(cont) + "(self):\n\t\t"
-        content += "retorno = self." + MUT.name + "("
+        content += "retorno = self.test." + MUT.name + "("
 
         for x in range(0, len(MUT.params)):
             if (x == 0):
