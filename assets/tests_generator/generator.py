@@ -192,7 +192,7 @@ class Generator:
             provided_chars = v1.replace(" ", "").split(';')
             for character in provided_chars:
                 if content != '':
-                    content += self.or_operator + ' retorno == ' + character + '\''
+                    content += self.or_operator + ' retorno == \'' + character + '\''
                 else:
                     content += 'retorno == \'' + character + '\' '
 

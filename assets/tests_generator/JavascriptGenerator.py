@@ -44,13 +44,14 @@ class JavascriptGenerator(Generator):
         # if (MUT.package_name != ''):
         #     content += "package " + MUT.package_name + ";\n"
         content += "describe( \""
-        content += MUT.class_name + " Tests \", () => {\n"
+        content += MUT.class_name + " Tests \", () => {\n\tlet objeto;\n"
+        content += "\n\tbeforeEach(() => {\n\t\tobjeto = new " + MUT.class_name + "(coloque os parametros)\n\t});\n"
         return content
 
 
     def test_content(self, MUT, test_set_name, cont, testset_position):
-        content = "\n\tit(\" test " + test_set_name + str(cont) + "\", () => {\n\t\t"
-        content +="const retorno = " + MUT.name + "("
+        content = "\n\tit(\"test " + test_set_name + str(cont) + "\", () => {\n\t\t"
+        content +="const retorno = objeto." + MUT.name + "("
 
         # TO DO: gerar valores
         for x in range(0, len(MUT.params)):
