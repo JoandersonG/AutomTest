@@ -19,8 +19,12 @@ OPEN_AI_API_KEY = "outra_key_aqui"
 ```
 Uma vez tendo o arquivo de chaves configurado, execute o arquivo api/app.py
 
-## Para construir arquivo .exe:
-Dentro do diretório 'api' rode: `pyinstaller app.spec`
+## Para construir arquivo distribuível (para linux ou .exe, por exemplo):
+Se assegure de ter todas as dependências do arquivo .spec desejado.
+Dentro do diretório 'api' rode: `pyinstaller <arquivo>.spec`
+Os arquivos .spec estão disponíveis dentro do diretório api/ neste projeto.
+Note que para gerar um arquivo para linux é necessário rodar o comando dentro de uma distribuição
+Linux, ou dentro do WSL.
 
 ## Remarks
 
