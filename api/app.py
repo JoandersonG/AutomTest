@@ -7,7 +7,7 @@ from flask_cors import cross_origin
 
 from assets.tests_generator import generate
 from assets.components import get_methods_from_test_cases, Method, Parameter, TestSet, ParamRange
-from assets.ui import MethodCatcherService
+from assets.ui import MethodCatcherService, EquivClassesCatcherService
 
 app = Flask(__name__)
 
@@ -148,59 +148,6 @@ def process_user_story():
         error_message = str(e)
         return jsonify({'error': error_message}), 400
 
-
-@app.route('/api/generate_equiv_classes', methods=['POST'])
-@cross_origin()
-def generate_equiv_classes():
-    try:
-        # Get the JSON data from the request
-        data = request.get_json()
-
-        if data is None:
-            return jsonify({'error': "Invalid Json format provided."}), 400
-
-        # Extract relevant fields
-        methodsJson = data.get('methods')
-
-        if methodsJson is None or methodsJson is []:
-            errorMsg = "Invalid JSON body. Please provide a list of methods"
-            return jsonify({'error': errorMsg}), 400
-
-        #Get methods from request body
-        methods = []
-        for methodJson in methodsJson:
-            method = Method(
-                            identifier=methodJson.get('identifier'),
-                            name=methodJson.get('name'),
-                            package_name=methodJson.get('packageName') if methodJson.get('packageName') else '',
-                            class_name=methodJson.get('className'),
-                            output_type=methodJson.get('returnType')
-            )
-            for parameter in methodJson.get('parameters'):
-                method.add_param_by_parameter(
-                    Parameter(
-                        identifier=parameter.get('identifier'),
-                        name=parameter.get('name'),
-                        type_name=parameter.get('type')
-                    )
-                )
-            methods.append(method)
-
-        response_data = []
-        for method in methods:
-            equiv_classes = generate.generate_equiv_classes(method)
-            equiv_classes_JSON = []
-            for equiv_class in equiv_classes:
-                equiv_classes_JSON.append(equiv_class.toJSON())
-            response_data.append(equiv_classes_JSON)
-            
-
-        return jsonify(response_data), 200
-
-    except Exception as e:
-        # Handle any exceptions (e.g., invalid JSON format)
-        error_message = str(e)
-        return jsonify({'error': error_message}), 500
 
 
 
