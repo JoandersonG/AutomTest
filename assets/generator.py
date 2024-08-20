@@ -4,6 +4,10 @@ import re
 import string
 
 
+def escape_chars(input):
+    return input.replace('\\', '\\\\').replace('"', '\\"')
+
+
 def get_YearMonthDay_from_Date(date):
     pattern = r"^\d{4}-\d{2}-\d{2}$"
     splitter = '/' if date.find('/') > 0 else '-'
@@ -128,14 +132,14 @@ def generate_param_value(MUT, i, j):  # i = parameter order / j = testset order
 
         content = ''
         for x in range(0, len(vals1)):
-            content += generate_String(vals1[x], vals2[x])
+            content += escape_chars(generate_String(vals1[x], vals2[x]))
         return '\"' + content + '\"'
 
     elif (MUT.params[i].type_name == 'char'):
         vals = MUT.testsets[j].ranges[i].v1.replace(" ", "").split(';')
         opcoes = ''
         for x in range(0, len(vals)):
-            opcoes += generate_String(vals[x], '1')
+            opcoes += escape_chars(generate_String(vals[x], '1'))
         return "\'" + opcoes[random.randint(0, len(opcoes) - 1)] + "\'"
 
     elif (MUT.params[i].type_name == 'int'):
@@ -198,13 +202,13 @@ def generate_expected_output(MUT, i):  # i = testset order
 
             content += '{' + qtd_ini + ',' + qtd_fim + '}'
 
-        content = 'retorno.matches(\"' + content + '$\")'
+        content = 'retorno.matches(\"' + escape_chars(content) + '$\")'
 
     elif (MUT.output_type == 'char'):
         vals = v1.replace(" ", "").split(';')
         opcoes = ''
         for x in range(0, len(vals)):
-            opcoes += generate_String(vals[x], '1')
+            opcoes += escape_chars(generate_String(vals[x], '1'))
         provided_chars = v1.replace(" ", "").split(';')
         for character in provided_chars:
             if content != '':
@@ -215,7 +219,7 @@ def generate_expected_output(MUT, i):  # i = testset order
     elif (MUT.output_type == 'boolean'):
 
         if (v1.casefold() == "true"):
-            content += "retorno"
+            return "retorno"
         else:
             return "!retorno"
 
