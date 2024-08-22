@@ -1,22 +1,22 @@
 from Generator import Generator
 
+
 class JavaGenerator(Generator):
 
-
     def __init__(self):
-        super().__init__( 
-                 or_operator='||', 
-                 and_operator='&&', 
-                 not_operator='!', 
-                 true_syntax='true', 
-                 false_syntax='false', 
-                 title='Test.java', 
-                 bottom="\n}"
-                 )
+        super().__init__(
+            or_operator='||',
+            and_operator='&&',
+            not_operator='!',
+            true_syntax='true',
+            false_syntax='false',
+            title='Test.java',
+            bottom="\n}"
+        )
 
     def get_date_format(self, year, month, day):
         return f"new Date({int(year)}, {int(month)}, {int(day)})"
-    
+
     def generate_date_output(self, v1, v2, v3):
         print(0)
         if (v1 != '' and v2 != ''):
@@ -24,7 +24,7 @@ class JavaGenerator(Generator):
             ymd2 = self.get_YearMonthDay_from_Date(v2)
             start_date = self.get_date_format(ymd1[0], ymd1[1], ymd1[2])
             end_date = self.get_date_format(ymd2[0], ymd2[1], ymd2[2])
-            content = '(!retorno.before(' + start_date + ") " + self.and_operator +  " !retorno.after(" + end_date + "))"
+            content = '(!retorno.before(' + start_date + ") " + self.and_operator + " !retorno.after(" + end_date + "))"
         if (v3 != ''):
             vals = v3.replace(" ", "").split(';')
             for x in range(0, len(vals)):
@@ -35,7 +35,6 @@ class JavaGenerator(Generator):
                 else:
                     content += 'retorno.equals(' + date + ")"
         return content
-
 
     def header_content(self, MUT):
         content = ''

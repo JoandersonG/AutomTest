@@ -7,7 +7,7 @@ from flask_cors import cross_origin
 
 from assets.tests_generator import generate
 from assets.components import get_methods_from_test_cases, Method, Parameter, TestSet, ParamRange
-from assets.ui import MethodCatcherService, EquivClassesCatcherService
+from assets.ui import MethodCatcherService
 
 app = Flask(__name__)
 

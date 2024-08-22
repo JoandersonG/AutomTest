@@ -26,7 +26,6 @@ class Generator:
         return ymd
 
 
-
     def generate_Date(self, v1, v2, v3):
         if v1 != '' and v2 != '':
 
@@ -132,7 +131,6 @@ class Generator:
         else:
             vals = v3.replace(" ", "").split(';')
             return vals[random.randint(0, len(vals) - 1)]
-    
 
     def generate_param_value(self, MUT, i, j):  # i = parameter order / j = testset order
         if (MUT.params[i].type_name == 'String'):
@@ -169,20 +167,40 @@ class Generator:
             else:
                 return self.false_syntax
 
-
     def generate_expected_output(self, MUT, i):  # i = testset order
+        signs_without_quotes = r"""!#$%&()*+,-.\\\/:;<=>?@\[\]^_`{|}~"""
 
         v1 = MUT.testsets[i].expected_range.v1
         v2 = MUT.testsets[i].expected_range.v2
         v3 = MUT.testsets[i].expected_range.v3
-        content = ''
-        if (MUT.output_type == 'String'):
-            vals1 = v1[1:len(v1) - 1].replace(" ", "").split('][')
-            vals2 = v2[1:len(v2) - 1].replace(" ", "").split('][')
+        content = '^'
+        if MUT.output_type == 'String':
+            substr = v1[1:len(v1) - 1].replace(" ", "").split('][')
+            qtd_range = v2[1:len(v2) - 1].replace(" ", "").split('][')
 
-            for x in range(0, len(vals1)):
-                content += self.generate_String(vals1[x], vals2[x])
-            content = 'retorno == \"' + content + '\"'
+            for x in range(0, len(substr)):
+                if substr[x] == 'numbers':
+                    content += '[0-9]'
+                elif substr[x] == 'letters':
+                    content += '[a-zA-Z]'
+                elif substr[x] == 'numbers/letters' or substr[x] == 'alphanumerics' or substr[x] == 'alphanumeric':
+                    content += '[a-zA-Z0-9]'
+                elif substr[x].casefold() == "any" \
+                        or substr[x].casefold() == "all" \
+                        or substr[x].casefold() == "any character" \
+                        or substr[x].casefold() == "any_character" \
+                        or substr[x].casefold() == "anycharacter":
+                    content += '.'
+                elif substr[x].casefold() == "signs" or substr[x].casefold() == "sign":
+                    content += '[' + signs_without_quotes + ']'
+                else:
+                    content += '(' + substr[x] + ")"
+                qtd_ini, qtd_fim = qtd_range[x].split('~')
+
+                content += '{' + qtd_ini + ',' + qtd_fim + '}'
+
+            #TODO: adaptar para outras linguagens:
+            content = 'retorno.matches(\"' + content + '$\")'
 
         elif (MUT.output_type == 'char'):
             vals = v1.replace(" ", "").split(';')
@@ -218,8 +236,18 @@ class Generator:
                         content += 'retorno == ' + vals[x]
 
         return content
-    
-    
+
+    #TODO: revisar se funciona em outras linguagens além do Java:
+    def replaceMethodNameWithPlaceholder(self, test_method_str):
+        pattern = r'@Test\s+public\s+void\s+\w+\s*\(\)\s*\{'
+        return re.sub(pattern, '@Test\n\tpublic void METHODNAME() {', test_method_str)
+
+    # TODO: revisar se funciona em outras linguagens além do Java:
+    def methodDoesNotExistYet(self, testMethodGenerated, methodsAlreadyWritten):
+        method_str_under_verif = self.replaceMethodNameWithPlaceholder(testMethodGenerated)
+        return all(
+            self.replaceMethodNameWithPlaceholder(method) != method_str_under_verif for method in methodsAlreadyWritten)
+
     def generate_tests(self, MUT, file_path=''):
         file_location = file_path + ('' if file_path.endswith('/') else '/') + MUT.class_name + self.title
         testfile = open(file_location, 'a+')
@@ -235,9 +263,19 @@ class Generator:
 
         cont = 1
         for i in range(0, len(MUT.testsets)):
-            for j in range(0, MUT.testsets[i].number_of_cases):
-                testfile.write(self.test_content(MUT, MUT.testsets[i].name, cont, i))
-                cont += 1
+            methodsAlreadyWritten = []
+            retries = 1000
+            j = 0
+            while j < MUT.testsets[i].number_of_cases:
+                j += 1
+                testMethodGenerated = self.test_content(MUT, MUT.testsets[i].name, cont, i)
+                if self.methodDoesNotExistYet(testMethodGenerated, methodsAlreadyWritten):
+                    testfile.write(testMethodGenerated)
+                    methodsAlreadyWritten.append(testMethodGenerated)
+                    cont += 1
+                elif retries != 0:
+                    j -= 1
+                    retries -= 1
 
         testfile.write(self.bottom)
         testfile.close()
