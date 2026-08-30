@@ -7,3 +7,11 @@ environment/SecretConfig.py
 /api/build/app/
 /api/dist/
 /api/build/app_linux
+myvenv/*
+.env
+.venv/*
+.codex/*
+.venv
+.codex
+.agents
+__pycache__

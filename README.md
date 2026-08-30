@@ -6,11 +6,45 @@ Towards a Test Case Generation Tool Based on Functional Requirements <https://dl
 - Recebe uma história de usuário e seu idioma
 - Retorna uma coleção de métodos
 
-### Para instalação do projeto:
-1. ```pip install -r  .\requirements.txt```'
-2. ```python3 -m spacy download pt_core_news_md```
+## Instalação:
 
-### Para executar:
+### Virtualenv:
+
+#### Criação da Virtualenv:
+
+1. Windows
+```
+python -m venv myvenv
+```
+ou, se seu Python estiver como python3:
+```
+python3 -m venv myvenv
+```
+
+2. Linux / macOS
+```
+python3 -m venv myvenv
+```
+
+#### Ativação da Virtualenv:
+
+1. Windows:
+```
+  venv\Scripts\activate
+```
+
+2. Linux:
+```
+  source myvenv/bin/activate
+```
+
+### Instalação de dependências:
+
+```pip3 install -r  requirements.txt```
+
+```python3 -m spacy download pt_core_news_md```
+
+## Configuração de variáveis de ambiente:
 Primeiro, você precisa do arquivo SecretConfig.py no diretório `/environment` dentro do projeto. Esse diretório deve conter
 as chaves de API necessárias ao AutomTest. O conteúdo do arquivo deve ser algo semelhante ao apresentado abaixo:
 ```
@@ -18,6 +52,79 @@ API_KEY = "key_aqui"
 OPEN_AI_API_KEY = "outra_key_aqui"
 ```
 Uma vez tendo o arquivo de chaves configurado, execute o arquivo api/app.py
+
+## Deploy no Vercel:
+
+O projeto está configurado para publicar a API Flask no Vercel usando:
+
+- `api/index.py`: wrapper WSGI usado pelo runtime Python do Vercel.
+- `vercel.json`: direciona todas as rotas para a API Flask.
+- `.vercelignore`: evita enviar ambientes virtuais, `.env` e arquivos locais desnecessários.
+
+Antes do deploy, cadastre no Vercel as variáveis de ambiente usadas pelo provedor de IA escolhido:
+
+```
+AUTOMTEST_API_KEY
+API_KEY
+OPEN_AI_API_KEY
+OPEN_AI_MODEL
+GEMINI_API_KEY
+ANTHROPIC_API_KEY
+CLAUDE_MODEL
+ANTHROPIC_MODEL
+```
+
+Use `AUTOMTEST_API_KEY` para proteger a API. Se ela não existir, a aplicação usa `API_KEY` como fallback.
+
+Todas as rotas `/api/*` exigem autenticação por chave. Envie a chave em um dos headers:
+
+```
+X-API-Key: sua_chave
+```
+
+ou:
+
+```
+Authorization: Bearer sua_chave
+```
+
+Deploy via CLI:
+
+```
+vercel
+```
+
+Deploy de produção:
+
+```
+vercel --prod
+```
+
+Após publicar, valide a API em:
+
+```
+https://SEU-PROJETO.vercel.app/api/health
+```
+
+Exemplo com header:
+
+```
+curl -H "X-API-Key: sua_chave" https://SEU-PROJETO.vercel.app/api/health
+```
+
+
+## Executando local:
+
+1. Ative a virtualenv:
+```
+  source source myvenv/bin/activate
+```
+2. Rodando o python:
+
+```
+ python3 app.py
+```
+
 
 ## Para construir arquivo .exe:
 Dentro do diretório 'api' rode: `pyinstaller app.spec`
